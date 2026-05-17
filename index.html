@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Asimetrías de Género en el Código Penal Español | Análisis Jurídico Interactivo</title>
+    <style>
+        :root {
+            --bg: #0b0c10;
+            --surface: #1f2128;
+            --surface2: #282a33;
+            --gold: #d4af37;
+            --gold-light: #f0d060;
+            --accent: #c0392b;
+            --text: #e0e0e0;
+            --text-secondary: #a0a0b0;
+            --border: #2a2c35;
+            --shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+            --radius: 18px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: var(--bg);
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            color: var(--text);
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Main container */
+        .app {
+            width: 100%;
+            max-width: 1300px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Header */
+        .main-header {
+            text-align: center;
+            margin: 40px 0 30px;
+        }
+        .main-header h1 {
+            font-size: 2.6rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            background: linear-gradient(135deg, var(--gold-light), var(--gold));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+        }
+        .main-header .subhead {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .main-header .badge {
+            display: inline-block;
+            background: rgba(212, 175, 55, 0.12);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            color: var(--gold);
+            border-radius: 30px;
+            padding: 6px 20px;
+            font-size: 0.9rem;
+            margin-top: 12px;
+            font-weight: 500;
+        }
+
+        /* Cards Grid (home view) */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+            width: 100%;
+            margin: 20px 0 50px;
+        }
+
+        .card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 28px 24px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        .card:hover {
+            transform: translateY(-6px);
+            border-color: var(--gold);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5);
+            background: var(--surface2);
+        }
+        .card-number {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--gold);
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+        .card-title {
+            font-size: 1.2rem;
+            font-weight: 650;
+            margin-bottom: 12px;
+            color: #ffffff;
+            line-height: 1.3;
+        }
+        .card-summary {
+            font-size: 0.92rem;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+        .card-icon {
+            font-size: 2rem;
+            margin-bottom: 12px;
+        }
+        .card-hint {
+            position: absolute;
+            bottom: 15px;
+            right: 20px;
+            font-size: 0.75rem;
+            color: rgba(212, 175, 55, 0.7);
+            font-style: italic;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .card:hover .card-hint {
+            opacity: 1;
+        }
+
+        /* Detail view (full page) */
+        .detail-view {
+            display: none;
+            width: 100%;
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 30px 20px 60px;
+            animation: fadeInUp 0.4s ease;
+        }
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .back-button {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--gold);
+            padding: 10px 22px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 0.95rem;
+            margin-bottom: 30px;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .back-button:hover {
+            background: rgba(212, 175, 55, 0.1);
+            border-color: var(--gold);
+        }
+
+        .detail-content {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 40px 36px;
+            box-shadow: var(--shadow);
+        }
+        .detail-content h2 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: #fff;
+            border-left: 4px solid var(--gold);
+            padding-left: 18px;
+        }
+        .detail-content .card-number-detail {
+            color: var(--gold);
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+            margin-bottom: 5px;
+        }
+        .detail-content .subtitle {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            margin-bottom: 25px;
+        }
+        .detail-content h3 {
+            font-size: 1.3rem;
+            color: var(--gold-light);
+            margin: 28px 0 10px;
+            font-weight: 600;
+        }
+        .detail-content p {
+            margin-bottom: 16px;
+            color: #ccc;
+            line-height: 1.7;
+        }
+        .detail-content .legal-box {
+            background: rgba(0, 0, 0, 0.25);
+            border-left: 4px solid var(--accent);
+            padding: 18px 22px;
+            border-radius: 0 10px 10px 0;
+            margin: 20px 0;
+            font-size: 0.95rem;
+        }
+        .detail-content .legal-box strong {
+            color: #fff;
+        }
+        .question-box {
+            background: rgba(212, 175, 55, 0.08);
+            border: 1px dashed rgba(212, 175, 55, 0.5);
+            border-radius: 12px;
+            padding: 20px 24px;
+            margin: 28px 0;
+            color: var(--gold-light);
+            font-weight: 500;
+        }
+        .boe-links {
+            margin-top: 30px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        .boe-link {
+            background: #1e1e2a;
+            border: 1px solid var(--border);
+            color: var(--gold);
+            text-decoration: none;
+            padding: 10px 22px;
+            border-radius: 30px;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .boe-link:hover {
+            background: rgba(212, 175, 55, 0.1);
+            border-color: var(--gold);
+            color: #fff;
+        }
+
+        .footer {
+            margin-top: 50px;
+            text-align: center;
+            color: #6b6b7a;
+            font-size: 0.8rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            padding-top: 25px;
+            width: 100%;
+            max-width: 1100px;
+        }
+        .footer a {
+            color: var(--gold);
+            text-decoration: none;
+        }
+
+        @media (max-width: 700px) {
+            .main-header h1 {
+                font-size: 1.8rem;
+            }
+            .detail-content {
+                padding: 24px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app">
+        <!-- Header (visible on both views) -->
+        <header class="main-header" id="mainHeader">
+            <h1>⚖️ Asimetrías Penales de Género</h1>
+            <p class="subhead">Siete situaciones cotidianas donde el Código Penal español trata de forma distinta a hombres y mujeres. Pulsa cada tarjeta para un análisis jurídico profundo.</p>
+            <span class="badge">📚 LO 1/2004 · CP · LECrim</span>
+        </header>
+
+        <!-- HOME VIEW: Cards Grid -->
+        <div id="homeView" class="cards-grid">
+            <!-- Card 1 -->
+            <div class="card" data-detail="1">
+                <div class="card-number">Tarjeta 1</div>
+                <div class="card-icon">👊</div>
+                <div class="card-title">Art. 153.1 vs 153.2 CP<br>Mínimos de Prisión</div>
+                <div class="card-summary">Mismo bofetón mutuo sin lesiones: el chico arriesga 6 meses mínimo, la chica 3 meses. El doble de pena mínima según el sexo del agresor.</div>
+                <div class="card-hint">Ver análisis completo →</div>
+            </div>
+            <!-- Card 2 -->
+            <div class="card" data-detail="2">
+                <div class="card-number">Tarjeta 2</div>
+                <div class="card-icon">📱</div>
+                <div class="card-title">Art. 172.2 vs 172.3 CP<br>Coacciones Digitales</div>
+                <div class="card-summary">Revisar el móvil o prohibir amistades: él va a prisión por violencia de género; ella solo recibe multa como delito leve.</div>
+                <div class="card-hint">Ver análisis completo →</div>
+            </div>
+            <!-- Card 3 -->
+            <div class="card" data-detail="3">
+                <div class="card-number">Tarjeta 3</div>
+                <div class="card-icon">🗣️</div>
+                <div class="card-title">Art. 171.4 vs 171.7 CP<br>Amenazas Leves</div>
+                <div class="card-summary">"Como te vea con otro…": si la víctima es mujer, la Fiscalía actúa de oficio; si es varón, necesita denuncia formal obligatoria.</div>
+                <div class="card-hint">Ver análisis completo →</div>
+            </div>
+            <!-- Card 4 -->
+            <div class="card" data-detail="4">
+                <div class="card-number">Tarjeta 4</div>
+                <div class="card-icon">💔</div>
+                <div class="card-title">Art. 468.2 CP<br>Quebrantamiento Consentido</div>
+                <div class="card-summary">Ella le escribe, él acude. Aunque ambos quieran verse, él comete delito con pena de prisión. El consentimiento de ella no importa.</div>
+                <div class="card-hint">Ver análisis completo →</div>
+            </div>
+            <!-- Card 5 -->
+            <div class="card" data-detail="5">
+                <div class="card-number">Tarjeta 5</div>
+                <div class="card-icon">📞</div>
+                <div class="card-title">Art. 172 ter 1 vs 172 ter 2 CP<br>Stalking</div>
+                <div class="card-summary">Hostigamiento post‑ruptura: ella puede recibir multa; él obligatoriamente prisión en su mitad superior, sin multa posible.</div>
+                <div class="card-hint">Ver análisis completo →</div>
+            </div>
+            <!-- Card 6 -->
+            <div class="card" data-detail="6">
+                <div class="card-number">Tarjeta 6</div>
+                <div class="card-icon">🚔</div>
+                <div class="card-title">Art. 495 LECrim<br>Detención Preventiva</div>
+                <div class="card-summary">Misma discusión de pareja: la policía no puede detener a la chica (delito leve), pero sí al chico (delito menos grave).</div>
+                <div class="card-hint">Ver análisis completo →</div>
+            </div>
+            <!-- Card 7 -->
+            <div class="card" data-detail="7">
+                <div class="card-number">Tarjeta 7</div>
+                <div class="card-icon">🏥</div>
+                <div class="card-title">Art. 147.1 vs 148.4 CP<br>Lesiones con Puntos</div>
+                <div class="card-summary">Puñetazo que requiere sutura: ella 6 meses–3 años; él 2–5 años por ser pareja de la víctima.</div>
+                <div class="card-hint">Ver análisis completo →</div>
+            </div>
+        </div>
+
+        <!-- DETAIL VIEW (initially hidden) -->
+        <div id="detailView" class="detail-view">
+            <button class="back-button" id="backBtn">← Volver a las tarjetas</button>
+            <div id="detailContent" class="detail-content"></div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer" id="footer">
+            <p>⚖️ Herramienta educativa y de debate crítico. Textos legales según la consolidación vigente del Código Penal (LO 10/1995) y la Ley de Enjuiciamiento Criminal. Las preguntas reflejan debates académicos actuales.</p>
+            <p style="margin-top:8px;">
+                <a href="https://www.boe.es/buscar/act.php?id=BOE-A-1995-25444" target="_blank" rel="noopener">Código Penal en el BOE</a> ·
+                <a href="https://www.boe.es/buscar/act.php?id=BOE-A-1882-6036" target="_blank" rel="noopener">LECrim en el BOE</a> ·
+                <a href="https://www.boe.es/buscar/act.php?id=BOE-A-2004-21760" target="_blank" rel="noopener">LO 1/2004 Integral Violencia Género</a>
+            </p>
+        </div>
+    </div>
+
+    <script>
+        // Detailed content for each card – stored as an object of HTML strings
+        const detailData = {
+            1: `
+                <div class="card-number-detail">TARJETA 1 · MALTRATO DE OBRA</div>
+                <h2>Art. 153.1 vs 153.2 CP – Mínimos de Prisión</h2>
+                <p class="subtitle">Discusión en el patio del instituto con empujón o bofetón mutuo sin lesiones que requieran asistencia médica.</p>
+
+                <h3>📋 Base legal comparada</h3>
+                <div class="legal-box">
+                    <strong>Artículo 153.1 CP (Violencia de Género):</strong> “El que por cualquier medio o procedimiento causare a otro menoscabo psíquico o una lesión de menor gravedad […] cuando la víctima sea o haya sido su cónyuge o mujer ligada por análoga relación de afectividad […] será castigado con la pena de prisión de <strong>seis meses a un año</strong>.”<br><br>
+                    <strong>Artículo 153.2 CP (Violencia Doméstica no constitutiva de género):</strong> “Si la víctima fuere alguna de las personas a que se refiere el apartado 2 del artículo 173, […] se impondrá la pena de prisión de <strong>tres meses a 6 meses</strong> o trabajos en beneficio de la comunidad de 31 a 80 días.”
+                </div>
+
+                <h3>🔍 Análisis en profundidad</h3>
+                <p>El legislador introdujo la diferenciación en 2004 mediante la LO 1/2004 de Medidas de Protección Integral contra la Violencia de Género. El fundamento constitucional se encuentra en el art. 9.2 CE (obligación de los poderes públicos de promover la igualdad real) y en la lucha contra una violencia estructural que, según el Tribunal Constitucional (STC 59/2008), tiene una “dimensión social” específica cuando es ejercida por el hombre sobre la mujer en la pareja.</p>
+                <p>Sin embargo, la diferencia en el límite mínimo (seis meses frente a tres) no se basa en la entidad de la agresión —que es idéntica— sino en la presunción de un mayor desvalor añadido por la discriminación histórica. La doctrina penal crítica que esto supone una quiebra del principio de proporcionalidad y del principio de culpabilidad por el hecho, ya que se castiga más severamente al varón por el mero dato estadístico de pertenencia de género.</p>
+                <p>En la práctica, un joven de 18 años que propina un empujón a su novia puede ingresar en prisión preventiva, mientras que si la novia le empuja a él, el límite mínimo es la mitad y las posibilidades de sustitución de la pena son mayores. La pregunta que surge es si esta diferencia resiste un test de igualdad estricto (art. 14 CE) o si se trata de una discriminación positiva justificada.</p>
+
+                <div class="question-box">
+                    ❓ Pregunta de control: «¿Cómo justifica usted científicamente ante los alumnos de esta clase que, ante un mismo golpe idéntico y sin lesiones en el patio, el Código Penal establezca un límite mínimo de prisión para el chico que es exactamente el doble que para la chica?»
+                </div>
+
+                <div class="boe-links">
+                    <a href="https://www.boe.es/buscar/act.php?id=BOE-A-1995-25444#a153" target="_blank" rel="noopener" class="boe-link">📄 Art. 153 CP en el BOE</a>
+                    <a href="https://www.boe.es/buscar/act.php?id=BOE-A-2004-21760" target="_blank" rel="noopener" class="boe-link">📄 LO 1/2004 Integral Violencia Género</a>
+                </div>
+            `,
+            2: `
+                <div class="card-number-detail">TARJETA 2 · CONTROL DIGITAL</div>
+                <h2>Art. 172.2 vs 172.3 CP – Coacciones Leves</h2>
+                <p class="subtitle">Revisar el WhatsApp, exigir contraseñas o prohibir amistades.</p>
+
+                <h3>📋 Base legal comparada</h3>
+                <div class="legal-box">
+                    <strong>Artículo 172.2 CP (Violencia de Género):</strong> “El que de modo leve coaccione a quien sea o haya sido su esposa, o mujer que esté o haya estado ligada a él por análoga relación de afectividad […] será castigado con la pena de <strong>prisión de seis meses a un año</strong> o trabajos en beneficio de la comunidad de 31 a 80 días.”<br><br>
+                    <strong>Artículo 172.3 CP (Delito leve común):</strong> “Fuera de los casos anteriores, el que cause a otro una coacción leve será castigado con la pena de <strong>multa de uno a tres meses</strong>.”
+                </div>
+
+                <h3>🔍 Análisis en profundidad</h3>
+                <p>Las conductas de control digital —revisar el móvil, imponer contraseñas, vigilar las redes sociales— son idénticas en su mecánica, pero el Código Penal las clasifica de forma radicalmente distinta según el sexo del autor. Si el control lo ejerce un varón sobre su pareja mujer, la conducta se eleva a delito de violencia de género con pena de prisión. Si la controladora es una mujer hacia su novio varón, la respuesta penal es un delito leve sancionado solo con multa.</p>
+                <p>Esta asimetría se justifica oficialmente en la protección reforzada de la mujer como víctima de una violencia estructural. Sin embargo, numerosos estudios universitarios (p. ej., el meta‑análisis de Archer, 2000, y encuestas como la del Instituto de la Juventud) muestran que las conductas de control digital en parejas jóvenes son simétricas o incluso ligeramente más frecuentes por parte de las chicas. La ley, no obstante, ignora ese dato empírico y mantiene una presunción iuris et de iure de que el control masculino es más grave.</p>
+                <p>Desde la perspectiva del principio de lesividad, la afectación a la libertad es la misma. La diferencia de trato introduce una pena privativa de libertad para el hombre y una mera sanción económica para la mujer, lo que genera un intenso debate sobre si se vulnera el principio de igualdad ante la ley.</p>
+
+                <div class="question-box">
+                    ❓ Pregunta de control: «Si las encuestas de las universidades reflejan que las conductas de control digital son simétricas entre los jóvenes, ¿por qué la ley penal persigue con cárcel el control de un chico a una chica y sanciona con una simple multa el de una chica a un chico?»
+                </div>
+
+                <div class="boe-links">
+                    <a href="https://www.boe.es/buscar/act.php?id=BOE-A-1995-25444#a172" target="_blank" rel="noopener" class="boe-link">📄 Art. 172 CP en el BOE</a>
+                </div>
+            `,
+            3: `
+                <div class="card-number-detail">TARJETA 3 · AMENAZAS LEVES</div>
+                <h2>Art. 171.4 vs 171.7 CP – Perseguibilidad</h2>
+                <p class="subtitle">Amenazas como “como te vea con otro/a te vas a enterar” durante una ruptura.</p>
+
+                <h3>📋 Base legal comparada</h3>
+                <div class="legal-box">
+                    <strong>Artículo 171.4 CP (Violencia de Género):</strong> “El que de modo leve amenace a quien sea o haya sido su esposa, o mujer que esté o haya estado ligada a él por análoga relación de afectividad […] será castigado con la pena de prisión de seis meses a un año […] <strong>perseguible de oficio</strong>.”<br><br>
+                    <strong>Artículo 171.7 CP (Delito leve):</strong> “Fuera de los casos anteriores, el que de modo leve amenace a otro será castigado con la pena de multa de uno a tres meses. <strong>Solo será perseguible mediante denuncia de la persona agraviada</strong>.”
+                </div>
+
+                <h3>🔍 Análisis en profundidad</h3>
+                <p>La perseguibilidad es una cuestión procesal de enorme trascendencia. Cuando la víctima es una mujer, la amenaza leve del varón se convierte en un delito público: la policía y el Ministerio Fiscal están obligados a investigar y acusar aunque ella no quiera denunciar, incluso si se opone expresamente. En cambio, si la víctima es un varón, el delito es semipúblico: requiere denuncia del agraviado. Si el chico no supera la barrera social de acudir a comisaría, el hecho queda impune.</p>
+                <p>Esta configuración parte de la idea de que la mujer en el ámbito de la pareja puede estar sometida a un ciclo de violencia que le impida denunciar, por lo que el Estado debe sustituir su voluntad. Sin embargo, se elimina por completo la autonomía de la mujer adulta para decidir si desea activar el sistema penal, lo que algunos sectores tachan de paternalismo jurídico. Al mismo tiempo, se ignora que los varones también pueden sufrir las mismas barreras psicológicas o de estigma social para denunciar.</p>
+
+                <div class="question-box">
+                    ❓ Pregunta de control: «¿Por qué el Estado activa de oficio toda la maquinaria judicial si la amenaza leve la sufre una alumna, pero exige que un alumno denuncie formalmente para recibir la misma protección ante el mismo acto?»
+                </div>
+
+                <div class="boe-links">
+                    <a href="https://www.boe.es/buscar/act.php?id=BOE-A-1995-25444#a171" target="_blank" rel="noopener" class="boe-link">📄 Art. 171 CP en el BOE</a>
+                </div>
+            `,
+            4: `
+                <div class="card-number-detail">TARJETA 4 · QUEBRANTAMIENTO CONSENTIDO</div>
+                <h2>Art. 468.2 CP – El consentimiento no exonera</h2>
+                <p class="subtitle">Ella le escribe por Instagram, le pide quedar, él acude. Ambos quieren verse. Pese a ello, él delinque.</p>
+
+                <h3>📋 Base legal</h3>
+                <div class="legal-box">
+                    <strong>Artículo 468.2 CP:</strong> “Se impondrá en todo caso la pena de prisión de <strong>seis meses a un año</strong> al que quebrantare una pena de las contempladas en el artículo 48 […] <strong>sin que quepa apreciar el consentimiento de la víctima como causa de justificación</strong>.”
+                </div>
+
+                <h3>🔍 Análisis en profundidad</h3>
+                <p>Cuando un juez impone una orden de alejamiento cautelar en un procedimiento por violencia de género, el deber de cumplirla recae exclusivamente sobre el varón. El artículo 468.2 CP establece que el consentimiento de la mujer, su iniciativa o su perdón no anulan el delito. De modo que si ella le envía un mensaje, le llama o le ruega que se vean, y él acepta, comete automáticamente un delito de quebrantamiento que conlleva prisión.</p>
+                <p>La razón de esta norma es evitar que la víctima, por dependencia emocional o presión, “perdone” al agresor y lo exponga a una situación de riesgo. Sin embargo, en la práctica se producen situaciones en las que la propia mujer desea reanudar la relación voluntariamente. La ley anula esa voluntad y convierte al joven en delincuente incluso cuando el encuentro es pacífico y buscado por ambos. Esto plantea un dilema sobre los límites del Estado en la protección de las víctimas y sobre la capacidad de autodeterminación de la mujer.</p>
+
+                <div class="question-box">
+                    ❓ Pregunta de control: «¿Cómo justifica que el sistema penal envíe a prisión a un joven por retomar una conversación totalmente consentida por ambas partes, anulando por completo el valor de la voluntad individual de la mujer implicada?»
+                </div>
+
+                <div class="boe-links">
+                    <a href="https://www.boe.es/buscar/act.php?id=BOE-A-1995-25444#a468" target="_blank" rel="noopener" class="boe-link">📄 Art. 468 CP en el BOE</a>
+                </div>
+            `,
+            5: `
+                <div class="card-number-detail">TARJETA 5 · STALKING</div>
+                <h2>Art. 172 ter 1 vs 172 ter 2 CP – Acoso</h2>
+                <p class="subtitle">Llamadas insistentes, esperas en la puerta del instituto, mensajes masivos tras la ruptura.</p>
+
+                <h3>📋 Base legal comparada</h3>
+                <div class="legal-box">
+                    <strong>Artículo 172 ter 1 CP (Tipo básico):</strong> Pena de <strong>prisión de tres meses a dos años o multa de seis a veinticuatro meses</strong> para quien acose a otro.<br><br>
+                    <strong>Artículo 172 ter 2 CP (Subtipo agravado):</strong> “Cuando la víctima sea alguna de las personas a las que se refiere el apartado 2 del artículo 173, se impondrá la <strong>pena en su mitad superior</strong>”, es decir, prisión de <strong>uno a dos años</strong>, desapareciendo la opción de multa.
+                </div>
+
+                <h3>🔍 Análisis en profundidad</h3>
+                <p>El delito de stalking se introdujo en 2015 para castigar conductas de vigilancia y persecución reiterada que alteran gravemente la vida cotidiana. Sin embargo, cuando el sujeto activo es varón y la víctima es su pareja o expareja mujer, la ley obliga a imponer la pena en su mitad superior (1‑2 años de prisión) y excluye la posibilidad de una simple multa, que sí está disponible si la acosadora es mujer.</p>
+                <p>La justificación oficial radica en que el acoso machista tendría un componente de dominación estructural que lo hace más grave. No obstante, desde la criminología se señala que el impacto psicológico del stalking no depende del sexo del hostigador. Así, se genera una desigualdad penológica que, de nuevo, se sustenta exclusivamente en el sexo del autor.</p>
+
+                <div class="question-box">
+                    ❓ Pregunta de control: «Si el acoso insistente tras una ruptura causa el mismo daño psicológico a un chico que a una chica, ¿por qué el Código Penal obliga a agravar automáticamente la pena solo si el sujeto activo es un varón?»
+                </div>
+
+                <div class="boe-links">
+                    <a href="https://www.boe.es/buscar/act.php?id=BOE-A-1995-25444#a172ter" target="_blank" rel="noopener" class="boe-link">📄 Art. 172 ter CP en el BOE</a>
+                </div>
+            `,
+            6: `
+                <div class="card-number-detail">TARJETA 6 · DETENCIÓN PREVENTIVA</div>
+                <h2>Art. 495 LECrim – Inmunidad femenina ante la detención</h2>
+                <p class="subtitle">Misma discusión mutua con insultos y empujones: la policía no puede detener a la chica, pero sí al chico.</p>
+
+                <h3>📋 Base legal</h3>
+                <div class="legal-box">
+                    <strong>Artículo 495 de la Ley de Enjuiciamiento Criminal:</strong> “<strong>No se podrá detener</strong> por la presunta comisión de <strong>delitos leves</strong> […] salvo que el delincuente no tuviere domicilio conocido y no diese fianza bastante.”
+                </div>
+
+                <h3>🔍 Análisis en profundidad</h3>
+                <p>La combinación de este precepto procesal con la calificación sustantiva de los hechos produce un efecto sorprendente: las agresiones leves, coacciones o amenazas realizadas por una mujer hacia su pareja varón son tipificadas como “delitos leves” (art. 153.2, 172.3, 171.7 CP). Por tanto, la policía tiene vedada su detención en la mayoría de los casos. En cambio, las mismas conductas del varón se consideran “delitos menos graves” de violencia de género, lo que permite su arresto inmediato y traslado a calabozos.</p>
+                <p>Esto implica que en un altercado de pareja donde ambos se han agredido mutuamente, solo el varón puede ser esposado y pasar la noche en dependencias policiales. La mujer, por disposición legal, goza de inmunidad ante la detención por esos mismos hechos. Esta diferencia es puramente procesal, pero tiene un impacto directo en el derecho a la libertad personal (art. 17 CE).</p>
+
+                <div class="question-box">
+                    ❓ Pregunta de control: «Teniendo en cuenta el artículo 495 de la LECrim, ¿por qué ante un mismo altercado leve de pareja la ley prohíbe explícitamente detener a la chica pero permite encerrar en el calabozo al chico de forma preventiva?»
+                </div>
+
+                <div class="boe-links">
+                    <a href="https://www.boe.es/buscar/act.php?id=BOE-A-1882-6036#a495" target="_blank" rel="noopener" class="boe-link">📄 Art. 495 LECrim en el BOE</a>
+                </div>
+            `,
+            7: `
+                <div class="card-number-detail">TARJETA 7 · LESIONES CON TRATAMIENTO MÉDICO</div>
+                <h2>Art. 147.1 vs 148.4 CP – Agravación por sexo</h2>
+                <p class="subtitle">Puñetazo que requiere puntos de sutura: la pena para ella es de 6 meses a 3 años; para él, de 2 a 5 años.</p>
+
+                <h3>📋 Base legal comparada</h3>
+                <div class="legal-box">
+                    <strong>Artículo 147.1 CP (Tipo básico de lesiones):</strong> “El que, por cualquier medio o procedimiento, causare a otro una lesión que menoscabe su integridad corporal o su salud física o mental, será castigado con la pena de prisión de <strong>seis meses a tres años</strong>.”<br><br>
+                    <strong>Artículo 148.4 CP (Tipo agravado):</strong> “Las lesiones previstas en el apartado 1 del artículo anterior podrán ser castigadas con la pena de prisión de <strong>dos a cinco años</strong> […] si la víctima fuere o hubiere sido esposa, o mujer que estuviese o hubiere estado ligada al autor por análoga relación de afectividad.”
+                </div>
+
+                <h3>🔍 Análisis en profundidad</h3>
+                <p>Una misma fractura de mandíbula que requiera cirugía maxilofacial será castigada con hasta 5 años de prisión si el agresor es varón y la víctima su pareja, pero con un máximo de 3 años si la agresora es mujer y el lesionado su novio. La agravación del art. 148.4 CP no exige un plus de gravedad en la lesión, sino que opera por la mera condición de la víctima como mujer pareja del autor.</p>
+                <p>Esta circunstancia mixta de parentesco y género ha sido avalada por el Tribunal Constitucional (STC 59/2008) al entender que la violencia del hombre hacia la mujer en la pareja es una manifestación de discriminación y dominación histórica, lo que justifica un mayor reproche penal. Sin embargo, los críticos sostienen que se vulnera el principio de culpabilidad por el hecho y se introduce un “Derecho penal de autor” encubierto, donde se castiga más al varón por lo que es (hombre) que por lo que hace.</p>
+
+                <div class="question-box">
+                    ❓ Pregunta de control: «Si una herida que requiere puntos de sutura es idéntica en el cuerpo de un chico y de una chica, ¿por qué el Código Penal eleva el castigo hasta los 5 años de cárcel basándose únicamente en el sexo de quien lanzó el golpe?»
+                </div>
+
+                <div class="boe-links">
+                    <a href="https://www.boe.es/buscar/act.php?id=BOE-A-1995-25444#a148" target="_blank" rel="noopener" class="boe-link">📄 Art. 148 CP en el BOE</a>
+                </div>
+            `
+        };
+
+        const homeView = document.getElementById('homeView');
+        const detailView = document.getElementById('detailView');
+        const detailContent = document.getElementById('detailContent');
+        const backBtn = document.getElementById('backBtn');
+        const mainHeader = document.getElementById('mainHeader');
+        const footer = document.getElementById('footer');
+
+        // Add click listeners to all cards
+        document.querySelectorAll('.card').forEach(card => {
+            card.addEventListener('click', function () {
+                const detailId = this.getAttribute('data-detail');
+                if (detailId && detailData[detailId]) {
+                    // Populate detail view
+                    detailContent.innerHTML = detailData[detailId];
+                    // Hide home view and show detail view
+                    homeView.style.display = 'none';
+                    detailView.style.display = 'block';
+                    // Scroll to top of the page
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                }
+            });
+        });
+
+        // Back button returns to grid
+        backBtn.addEventListener('click', function () {
+            detailView.style.display = 'none';
+            homeView.style.display = 'grid';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    </script>
+</body>
+</html>
